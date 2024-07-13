@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, Matches, IsAlpha } from 'class-validator';
+import { IsNotEmpty, MinLength, Matches } from 'class-validator';
 
 export class UserDto {
   @IsNotEmpty({ message: 'Name should not be empty' })
@@ -9,6 +9,7 @@ export class UserDto {
   readonly u_email: string;
 
   @IsNotEmpty({ message: 'Password should not be empty' })
+  @MinLength(8, { message: 'Passwor should be 8 character long' })
   readonly u_password: string;
 
   @IsNotEmpty({ message: 'User Role should not be empty' })
