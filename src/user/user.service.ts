@@ -36,5 +36,4 @@ export class UserService {
     return await this.doctorRepository.save(doctor);
   }
 
-  // Other user and doctor service methods as needed
 }
