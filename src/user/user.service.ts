@@ -52,10 +52,10 @@ export class UserService {
 
   // user login route
   async UserLogin(loginData: Partial<AuthDto>): Promise<UserEntity> {
-    console.log(loginData);
     const { u_email, u_password } = loginData;
     const user = await this.userRepository.findOne({
       where: { u_email },
+      relations: ['doctor'],
     });
 
     if (!user) {
@@ -65,6 +65,23 @@ export class UserService {
     if (!isValidPassword) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
     return user;
   }
 }
+
+
+
+
+
+
+
+
+// login credencials
+// {
+//   "u_name": "Abdullah Al Mahmud",
+//   "u_email": "abdullah@gmail.com",
+//   "u_password": "qwerty1234567",
+//   "u_role": "Doctor",
+//   "status": "pending"
+// }
