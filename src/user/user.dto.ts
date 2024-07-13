@@ -1,12 +1,18 @@
-import { IsAlpha, IsNotEmpty, Matches, MinLength } from 'class-validator';
+import { IsNotEmpty, IsEmail, Matches, IsAlpha } from 'class-validator';
 
 export class UserDto {
-  @IsNotEmpty()
-  u_name: string;
+  @IsNotEmpty({ message: 'Name should not be empty' })
+  readonly u_name: string;
 
-  @IsNotEmpty()
-  @Matches(/^[A-Za-z]+@gmail\.com/, {
-    message: 'Please, provide a valid email address',
-  })
-  u_email: string;
+  @Matches(/^[A-Za-z]+@gmail\.com/, { message: 'Invalid email' })
+  @IsNotEmpty({ message: 'Email should not be empty' })
+  readonly u_email: string;
+
+  @IsNotEmpty({ message: 'Password should not be empty' })
+  readonly u_password: string;
+
+  @IsNotEmpty({ message: 'User Role should not be empty' })
+  readonly u_role: string;
+  readonly status?: string;
+  readonly resetCode?: string;
 }

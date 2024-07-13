@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { DoctorEntity } from 'src/doctor/doctor.entity';
+import { UserDto } from './user.dto';
+import { DoctorDto } from 'src/doctor/doctor.dto';
 @Injectable()
 export class UserService {
   constructor(
@@ -13,13 +15,13 @@ export class UserService {
     private doctorRepository: Repository<DoctorEntity>,
   ) {}
 
-  async createUser(userData: Partial<UserEntity>): Promise<UserEntity> {
+  async createUser(userData: Partial<UserDto>): Promise<UserDto> {
     const user = this.userRepository.create(userData);
     return await this.userRepository.save(user);
   }
 
   async createDoctor(
-    doctorData: Partial<DoctorEntity>,
+    doctorData: Partial<DoctorDto>,
     u_id: number,
   ): Promise<DoctorEntity> {
     const user = await this.userRepository.findOne({
