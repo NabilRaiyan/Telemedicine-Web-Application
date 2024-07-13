@@ -7,6 +7,8 @@ import { UserDto } from './user.dto';
 import { DoctorDto } from 'src/doctor/doctor.dto';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './auth.dto';
+import { Request } from 'express';
+import session from 'express-session';
 
 @Injectable()
 export class UserService {
@@ -51,7 +53,10 @@ export class UserService {
   }
 
   // user login route
-  async UserLogin(loginData: Partial<AuthDto>): Promise<UserEntity> {
+  async UserLogin(
+    req: Request,
+    loginData: Partial<AuthDto>,
+  ): Promise<UserEntity> {
     const { u_email, u_password } = loginData;
     const user = await this.userRepository.findOne({
       where: { u_email },
@@ -65,17 +70,23 @@ export class UserService {
     if (!isValidPassword) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    req.session.user = user;
+    console.log(req.session.user);
 
     return user;
   }
+
+  // user logout
+  async logOut(req: Request): Promise<void> {
+    console.log(req.session);
+    req.session.destroy((err) => {
+      if (err) {
+        throw new Error('Failed to destroy session');
+      }
+      console.log(req.session);
+    });
+  }
 }
-
-
-
-
-
-
-
 
 // login credencials
 // {

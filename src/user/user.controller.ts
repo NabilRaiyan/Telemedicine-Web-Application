@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, Req, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
 import { DoctorEntity } from 'src/doctor/doctor.entity';
 import { UserDto } from './user.dto';
 import { DoctorDto } from 'src/doctor/doctor.dto';
 import { UserEntity } from './user.entity';
 import { AuthDto } from './auth.dto';
+import { Request } from 'express';
 
 @Controller('users')
 export class UserController {
@@ -27,7 +28,16 @@ export class UserController {
 
   // user login
   @Post('login')
-  async userLogin(@Body() loginData: AuthDto): Promise<UserEntity> {
-    return await this.userService.UserLogin(loginData);
+  async userLogin(
+    @Req() req: Request,
+    @Body() loginData: AuthDto,
+  ): Promise<UserEntity> {
+    return await this.userService.UserLogin(req, loginData);
+  }
+
+  // user logout
+  @Delete('logout')
+  async userLogOut(@Req() req: Request): Promise<void> {
+    await this.userService.logOut(req);
   }
 }
