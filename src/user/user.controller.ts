@@ -13,6 +13,7 @@ export class UserController {
     return await this.userService.createUser(userData);
   }
 
+  // creating doctor
   @Post(':u_id/createDoctor')
   async createDoctor(
     @Param('u_id') u_id: number,
