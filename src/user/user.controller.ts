@@ -8,6 +8,7 @@ import { DoctorDto } from 'src/doctor/doctor.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // creating user
   @Post('createUser')
   async createUser(@Body() userData: UserDto): Promise<UserDto> {
     return await this.userService.createUser(userData);
