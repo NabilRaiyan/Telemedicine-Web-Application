@@ -32,7 +32,6 @@ export class UserService {
     if (!user) {
       throw new Error('User not found');
     }
-
     const doctor = this.doctorRepository.create(doctorData);
     doctor.user = user;
     return await this.doctorRepository.save(doctor);
