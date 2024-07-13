@@ -1,29 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { Doctor } from './doctor.entity';
-
+import { UserEntity } from './user.entity';
+import { DoctorEntity } from 'src/doctor/doctor.entity';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
 
-    @InjectRepository(Doctor)
-    private doctorRepository: Repository<Doctor>,
+    @InjectRepository(DoctorEntity)
+    private doctorRepository: Repository<DoctorEntity>,
   ) {}
 
-  async createUser(userData: Partial<User>): Promise<User> {
+  async createUser(userData: Partial<UserEntity>): Promise<UserEntity> {
     const user = this.userRepository.create(userData);
     return await this.userRepository.save(user);
   }
 
   async createDoctor(
-    doctorData: Partial<Doctor>,
+    doctorData: Partial<DoctorEntity>,
     u_id: number,
-  ): Promise<Doctor> {
-    const user = await this.userRepository.findOne(u_id);
+  ): Promise<DoctorEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        u_id: u_id,
+      },
+    });
     if (!user) {
       throw new Error('User not found');
     }

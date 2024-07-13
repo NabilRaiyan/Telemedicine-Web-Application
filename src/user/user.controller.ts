@@ -1,24 +1,22 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  UsePipes,
-  ValidationPipe,
-  Body,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from './user.dto';
+import { UserEntity } from './user.entity';
+import { DoctorEntity } from 'src/doctor/doctor.entity';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('createUser')
-  @UsePipes(new ValidationPipe())
-  createUser(@Body() data: UserDto): object {
-    console.log(data);
-    return this.userService.createUser(data);
+  async createUser(@Body() userData: Partial<UserEntity>): Promise<UserEntity> {
+    return await this.userService.createUser(userData);
+  }
+
+  @Post(':u_id/createDoctor')
+  async createDoctor(
+    @Param('u_id') u_id: number,
+    @Body() doctorData: Partial<DoctorEntity>,
+  ): Promise<DoctorEntity> {
+    return await this.userService.createDoctor(doctorData, u_id);
   }
 }
