@@ -40,4 +40,24 @@ export class AppointmentService {
     appointment.patient = patient;
     return await this.appointmentRepository.save(appointment);
   }
+
+  // see patients details of logged in doctor
+  async getPatientsByDoctor(doctorId: number): Promise<PatientEntity[]> {
+    const appointments = await this.appointmentRepository.find({
+      where: { doctor: { d_id: doctorId } },
+      relations: ['patient'],
+    });
+
+    return appointments.map((appointment) => appointment.patient);
+  }
+
+  // see appoint history
+  async getAllAppointment(doctorId: number): Promise<AppointmentEntity[]> {
+    const appointment = await this.appointmentRepository.find({
+      where: { doctor: { d_id: doctorId } },
+      relations: ['patient'],
+    });
+
+    return appointment;
+  }
 }
