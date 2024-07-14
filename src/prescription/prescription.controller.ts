@@ -7,6 +7,9 @@ import {
   Req,
   Get,
   Put,
+  Delete,
+  NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PrescriptionDto } from './prescription.dto';
 import { PrescriptionEntity } from './prescription.entity';
@@ -59,5 +62,23 @@ export class PrescriptionController {
       doctorId,
       prescriptionDetails,
     );
+  }
+
+  // delete prescription controller
+  @Delete('deletePrescription/:id')
+  @UseGuards(SessionGuard)
+  async deletePrescriptionById(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<void> {
+    const doctorId = (req.session.user as any).doctor.d_id; // Replace with actual logic to get doctorId from session or token
+    try {
+      await this.prescriptionService.deletePrescriptionById(id, doctorId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error; // Let other unexpected errors propagate
+    }
   }
 }

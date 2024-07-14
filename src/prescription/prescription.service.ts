@@ -77,4 +77,22 @@ export class PrescriptionService {
     // Save updated prescription
     return await this.prescriptionRepository.save(prescription);
   }
+
+  // delete prescription by prescription id
+  async deletePrescriptionById(
+    prescriptionId: number,
+    doctorId: number,
+  ): Promise<void> {
+    const prescription = await this.prescriptionRepository.findOne({
+      where: { prescription_id: prescriptionId, doctor: { d_id: doctorId } },
+    });
+
+    if (!prescription) {
+      throw new NotFoundException(
+        'Prescription not found or you are not authorized to delete it.',
+      );
+    }
+
+    await this.prescriptionRepository.remove(prescription);
+  }
 }
