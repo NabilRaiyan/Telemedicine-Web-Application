@@ -1,4 +1,5 @@
 import { DoctorEntity } from 'src/doctor/doctor.entity';
+import { PatientEntity } from 'src/patient/patient.entity';
 import {
   Entity,
   Column,
@@ -30,4 +31,7 @@ export class UserEntity {
 
   @OneToOne(() => DoctorEntity, (doctor) => doctor.user, { cascade: true })
   doctor: DoctorEntity;
+
+  @OneToOne(() => PatientEntity, (patient) => patient.user, { cascade: true })
+  patient: PatientEntity;
 }

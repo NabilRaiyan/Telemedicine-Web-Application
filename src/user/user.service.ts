@@ -8,8 +8,8 @@ import { DoctorDto } from 'src/doctor/doctor.dto';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './auth.dto';
 import { Request } from 'express';
-import session from 'express-session';
-
+import { PatientDto } from 'src/patient/patient.dto';
+import { PatientEntity } from 'src/patient/patient.entity';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -20,6 +20,9 @@ export class UserService {
 
     @InjectRepository(DoctorEntity)
     private doctorRepository: Repository<DoctorEntity>,
+
+    @InjectRepository(PatientEntity)
+    private patientRepository: Repository<PatientEntity>,
   ) {}
 
   // registering or creating user
@@ -52,6 +55,24 @@ export class UserService {
     return await this.doctorRepository.save(doctor);
   }
 
+  // creating patient
+  async createPatient(
+    patientData: Partial<PatientDto>,
+    u_id: number,
+  ): Promise<PatientEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        u_id: u_id,
+      },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const patient = this.patientRepository.create(patientData);
+    patient.user = user;
+    return await this.patientRepository.save(patient);
+  }
+
   // user login route
   async UserLogin(
     req: Request,
@@ -78,7 +99,7 @@ export class UserService {
 
   // user logout
   async logOut(req: Request): Promise<void> {
-    console.log(req.session);
+    // console.log(req.session);
     req.session.destroy((err) => {
       if (err) {
         throw new Error('Failed to destroy session');
