@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserEntity } from 'src/user/user.entity';
+import { AppointmentEntity } from 'src/appointment/appointment.entity';
 
 @Entity('doctor')
 export class DoctorEntity {
@@ -37,4 +39,9 @@ export class DoctorEntity {
   @OneToOne(() => UserEntity, (user) => user.doctor)
   @JoinColumn()
   user: UserEntity;
+
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.doctor, {
+    cascade: true,
+  })
+  appointment: AppointmentEntity;
 }
