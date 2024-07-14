@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { AppointmentModule } from './appointment/appointment.module';
+import { PrescriptionModule } from './prescription/prescription.module';
 
 @Module({
   imports: [
     DoctorModule,
     AppointmentModule,
+    PrescriptionModule,
     UserModule,
     TypeOrmModule.forRoot({
       type: 'postgres',

@@ -9,7 +9,12 @@ import { PatientEntity } from 'src/patient/patient.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AppointmentEntity, DoctorEntity, PatientEntity]),
+    TypeOrmModule.forFeature([
+      AppointmentEntity,
+      DoctorEntity,
+      PatientEntity,
+      PatientEntity,
+    ]),
   ],
   controllers: [AppointmentController],
   providers: [AppointmentService],

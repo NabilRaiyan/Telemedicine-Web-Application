@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from 'src/user/user.entity';
 import { AppointmentEntity } from 'src/appointment/appointment.entity';
+import { PrescriptionEntity } from 'src/prescription/prescription.entity';
 
 @Entity('doctor')
 export class DoctorEntity {
@@ -44,4 +45,9 @@ export class DoctorEntity {
     cascade: true,
   })
   appointment: AppointmentEntity;
+
+  @OneToMany(() => PrescriptionEntity, (prescription) => prescription.doctor, {
+    cascade: true,
+  })
+  prescription: PrescriptionEntity;
 }
